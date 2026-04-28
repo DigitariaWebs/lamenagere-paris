@@ -1,0 +1,92 @@
+import React from "react";
+import { View, Text } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { COLORS } from "../../lib/constants";
+import type { Message } from "../../lib/types";
+
+interface MessageBubbleProps {
+  message: Message;
+  showAvatar?: boolean;
+}
+
+export default function MessageBubble({ message, showAvatar = true }: MessageBubbleProps) {
+  const isUser = message.sender === "user";
+
+  const time = new Date(message.createdAt).toLocaleTimeString("fr-FR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  return (
+    <View
+      style={{
+        alignSelf: isUser ? "flex-end" : "flex-start",
+        maxWidth: "78%",
+        marginBottom: 10,
+        flexDirection: isUser ? "row-reverse" : "row",
+        alignItems: "flex-end",
+        gap: 8,
+      }}
+    >
+      {/* Vendor avatar */}
+      {!isUser && showAvatar && (
+        <View
+          style={{
+            width: 28,
+            height: 28,
+            borderRadius: 14,
+            backgroundColor: COLORS.primary,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <MaterialCommunityIcons name="store" size={14} color="#fff" />
+        </View>
+      )}
+      {!isUser && !showAvatar && <View style={{ width: 28 }} />}
+
+      <View>
+        <View
+          style={{
+            paddingHorizontal: 14,
+            paddingVertical: 10,
+            backgroundColor: isUser ? COLORS.primary : "#ffffff",
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
+            borderBottomLeftRadius: isUser ? 16 : 4,
+            borderBottomRightRadius: isUser ? 4 : 16,
+            shadowColor: isUser ? "transparent" : "rgba(0,0,0,0.04)",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 1,
+            shadowRadius: 8,
+            elevation: isUser ? 0 : 1,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 14,
+              fontFamily: "Inter_400Regular",
+              color: isUser ? "#ffffff" : COLORS.onSurface,
+              lineHeight: 20,
+            }}
+          >
+            {message.content}
+          </Text>
+        </View>
+        <Text
+          style={{
+            fontSize: 10,
+            fontFamily: "Inter_400Regular",
+            color: COLORS.outline,
+            marginTop: 4,
+            textAlign: isUser ? "right" : "left",
+            marginLeft: isUser ? 0 : 2,
+            marginRight: isUser ? 2 : 0,
+          }}
+        >
+          {time}
+        </Text>
+      </View>
+    </View>
+  );
+}

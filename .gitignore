@@ -39,3 +39,6 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# heavy product videos — manage via CDN/admin instead of git
+*.mp4

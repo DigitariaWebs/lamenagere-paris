@@ -1,0 +1,60 @@
+import React from "react";
+import { View, Text, ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { COLORS } from "../../../lib/constants";
+import { formatDate } from "../../../lib/utils";
+import Button from "../../../components/ui/Button";
+import Card from "../../../components/ui/Card";
+
+export default function CheckoutConfirmationScreen() {
+  const router = useRouter();
+  const today = new Date();
+  const orderNumber = `#LMP-${today.getFullYear()}-${String(Math.floor(Math.random() * 999) + 1).padStart(3, "0")}`;
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.background }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 40, alignItems: "center" }}>
+        <View
+          className="w-16 h-16 rounded-full items-center justify-center mb-6"
+          style={{ backgroundColor: COLORS.primary }}
+        >
+          <MaterialCommunityIcons name="check" size={32} color="#fff" />
+        </View>
+
+        <Text className="text-2xl mb-2" style={{ color: COLORS.primaryContainer, fontFamily: "Manrope_700Bold" }}>
+          Commande confirmée !
+        </Text>
+        <Text className="text-sm mb-8" style={{ color: COLORS.onSurfaceVariant }}>
+          Merci pour votre confiance.
+        </Text>
+
+        <Card padding="lg">
+          <View className="gap-3 w-full">
+            <Text className="text-lg" style={{ color: COLORS.onSurface, fontFamily: "Manrope_700Bold" }}>
+              {orderNumber}
+            </Text>
+            <Text className="text-sm" style={{ color: COLORS.outline }}>
+              {formatDate(today)}
+            </Text>
+            <View className="mt-2 pt-2" style={{ borderTopWidth: 1, borderTopColor: COLORS.surfaceContainerLow }}>
+              <Text className="text-sm" style={{ color: COLORS.secondary }}>
+                Livraison estimée : {formatDate(new Date(today.getTime() + 21 * 24 * 60 * 60 * 1000))}
+              </Text>
+            </View>
+          </View>
+        </Card>
+
+        <View className="w-full mt-8 gap-4">
+          <Button label="Suivi de commande" onPress={() => router.push("/(main)/orders")} variant="secondary" size="lg" />
+          <Button label="Continuer le shopping" onPress={() => router.replace("/(tabs)")} size="lg" />
+        </View>
+
+        <Text className="text-xs mt-6 text-center" style={{ color: COLORS.onSurfaceVariant }}>
+          Un e-mail de confirmation a été envoyé à votre adresse.
+        </Text>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
