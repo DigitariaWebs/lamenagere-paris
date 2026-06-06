@@ -1,8 +1,10 @@
 import type { IncomingMessage, ServerResponse } from 'http';
-// Imports the COMPILED app (dist/) — Vercel runs `npm run build` first, so tsc
-// has already emitted the decorator metadata Nest needs.
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-import { getApp } from '../dist/serverless';
+
+// Imports the COMPILED app (dist/serverless.js) — Vercel runs `npm run build`
+// first, so tsc has already emitted the decorator metadata Nest needs.
+// `require` (typed as any) avoids needing a .d.ts for the build output.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { getApp } = require('../dist/serverless');
 
 /**
  * Vercel serverless entry. All routes are rewritten to this function
